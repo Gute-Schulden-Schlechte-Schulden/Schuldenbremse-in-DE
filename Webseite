@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Staatshaushalt & Schulden: Ein Überblick</title>
+  <style>
+    /* === Grundlegende Resets === */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+    }
+
+    /* === Hintergrund & Grundlayout === */
+    body {
+      /* Leichter, dezenter Farbverlauf im Hintergrund */
+      background: linear-gradient(120deg, #f0f4fa 0%, #fcfcfc 100%);
+      color: #333;
+      line-height: 1.6;
+      overflow-x: hidden; /* Verhindert horizontales Scrollen bei ausgeklappter Sidebar */
+    }
+
+    /* === Hero-Bereich (großes Bild + Titel) === */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 60vh;
+      background:
+        linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("images/image.jpg") center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    }
+    .hero-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    }
+    .hero p {
+      font-size: 1.3rem;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.4;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+
+    /* === Container für Sidebar & Hauptinhalt === */
+    .page-container {
+      display: flex;
+      max-width: 1300px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* ===============================
+       SIDEBAR: Ein- und ausklappbar
+       =============================== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100%;
+      background: #ffffff;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+      padding: 2rem 1rem;
+      transform: translateX(-260px); /* verborgen zu Beginn */
+      transition: transform 0.3s ease;
+      z-index: 999;
+    }
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    .sidebar h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      color: #4c84ff;
+      border-bottom: 2px solid #4c84ff;
+      padding-bottom: 0.5rem;
+    }
+    .sidebar ul {
+      list-style: none;
+      margin-top: 1rem;
+    }
+    .sidebar ul li {
+      margin-bottom: 0.75rem;
+    }
+    .sidebar ul li a {
+      color: #333;
+      text-decoration: none;
+      font-weight: bold;
+      display: block;
+      padding: 0.5rem 0.5rem;
+      border-radius: 4px;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    .sidebar ul li a:hover {
+      background-color: #4c84ff;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    /* === Button für Sidebar-Toggle === */
+    .sidebar-toggle {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      background: #4c84ff;
+      color: #fff;
+      border: none;
+      outline: none;
+      padding: 0.8rem 1.2rem;
+      font-size: 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      z-index: 1001;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .sidebar-toggle:hover {
+      background-color: #3c6dd1;
+      transform: scale(1.05);
+    }
+
+    /* === Hauptinhalt === */
+    .main-content {
+      flex: 1;
+      margin-left: 0; 
+      padding: 2rem;
+      transition: margin-left 0.3s ease;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    /* Wenn Sidebar offen ist, rutscht Inhalt nach rechts */
+    .sidebar.open ~ .main-content {
+      margin-left: 250px;
+    }
+
+    /* === Überschriften in Sections (zentriert) === */
+    section h2 {
+      text-align: center;
+      font-size: 2rem;
+      color: #4c84ff;
+      margin-bottom: 1rem;
+    }
+
+    /* === Abschnitts-Container === */
+    section {
+      background: #fff;
+      padding: 1.5rem 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom: 2rem;
+      animation: fadeInUp 0.5s ease;
+    }
+    /* Animiertes Aufpoppen / “Fade-in” */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    section p {
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    /* === Bilder (kleiner) === */
+    .image-container {
+      text-align: center;
+      margin: 1.5rem 0;
+    }
+    .image-container img {
+      max-width: 60%;
+      height: auto;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    .image-container img:hover {
+      transform: scale(1.02);
+    }
+    .image-caption {
+      font-size: 0.9rem;
+      color: #555;
+      margin-top: 0.25rem;
+    }
+
+    /* === Tabellen === */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1rem 0;
+      overflow: hidden;
+      border-radius: 6px;
+    }
+    table th,
+    table td {
+      border: 1px solid #ddd;
+      padding: 0.75rem;
+      text-align: left;
+    }
+    table thead {
+      background-color: #4c84ff;
+      color: #fff;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    /* === Kommentarbereich === */
+    #comment-section {
+      margin-bottom: 2rem;
+    }
+    #comment-section h2 {
+      color: #4c84ff;
+      margin-bottom: 1rem;
+    }
+    #comment-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    #comment-form label {
+      font-weight: bold;
+    }
+    #comment-form input,
+    #comment-form textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    #comment-form button {
+      align-self: flex-start;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+      background: #4c84ff;
+      color: #fff;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s ease-in-out, transform 0.2s;
+    }
+    #comment-form button:hover {
+      background: #3c6dd1;
+      transform: scale(1.04);
+    }
+    .single-comment {
+      background: #f7f7f7;
+      border-left: 4px solid #4c84ff;
+      border-radius: 4px;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .single-comment h4 {
+      margin-bottom: 0.25rem;
+      color: #333;
+      font-size: 1.1rem;
+    }
+    .single-comment p {
+      margin-bottom: 0.25rem;
+    }
+    .single-comment small {
+      color: #666;
+    }
+
+    /* === Footer === */
+    footer {
+      background: #4c84ff;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+      margin-top: auto;
+      box-shadow: 0 -1px 4px rgba(0,0,0,0.1);
+    }
+    footer p {
+      margin: 0.25rem 0;
+    }
+
+    /* === Responsiveness (mobile) === */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+      .hero p {
+        font-size: 1rem;
+      }
+      .sidebar {
+        width: 200px;
+        transform: translateX(-210px);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .sidebar.open ~ .main-content {
+        margin-left: 200px;
+      }
+      .sidebar-toggle {
+        font-size: 1rem;
+        padding: 0.6rem 0.8rem;
+      }
+      .image-container img {
+        max-width: 80%;
+      }
+      section h2 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO-BEREICH MIT HINTERGRUNDBILD -->
+  <div class="hero">
+    <div class="hero-content">
+      <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+      <h1>Gute Schulden - Schlechte Schulden</h1>
+      <p>Ein Überblick zu Aufgaben, Einnahmen und Ausgaben des deutschen Staates</p>
+    </div>
+  </div>
+
+  <!-- SEITEN-CONTAINER -->
+  <div class="page-container">
+    
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <h2>Kategorien</h2>
+      <ul>
+        <li><a href="#einleitung">Einleitung</a></li>
+        <li><a href="#was-sind-schulden">Was sind Schulden?</a></li>
+        <li><a href="#schuldenbremse">Was ist die Schuldenbremse?</a></li>
+        <li><a href="#ausgabenposten">Größte Ausgabenposten</a></li>
+        <li><a href="#herausforderungen">Herausforderungen</a></li>
+        <li><a href="#pro-contra">Pro & Contra</a></li>
+        <li><a href="#stellungnahme">Stellungnahme</a></li>
+        <li><a href="#interviews">Interviews mit Expert:innen</a></li>
+        <li><a href="#fazit">Fazit</a></li>
+        <li><a href="#comment-section">Kommentare</a></li>
+      </ul>
+    </aside>
+
+    <!-- HAUPTINHALT -->
+    <div class="main-content">
+      
+      <!-- EINLEITUNG -->
+      <section id="einleitung">
+        <h2>Einleitung</h2>
+        <p>
+          Staatsaufgaben und finanzielle Herausforderungen
+          Der deutsche Staat übernimmt vielfältige Aufgaben: von der sozialen Sicherung über Bildung bis hin zur Bereitstellung moderner Infrastrukturen. Aktuell stehen zusätzliche Herausforderungen an: 
+        </p>
+        <ul>
+            <li><strong>Ökologische Transformation</strong> – Maßnahmen gegen den Klimawandel, Energiewende und Förderung nachhaltiger Technologien.</li>
+            <li><strong>Digitaler Strukturwandel</strong> – Ausbau digitaler Infrastrukturen und Unterstützung der Digitalisierung in Wirtschaft und Verwaltung.</li>
+        </ul>
+        <p>
+          Diese Aufgaben erfordern erhebliche finanzielle Mittel. Da die staatlichen Einnahmen 
+          begrenzt sind und die Schuldenbremse die Neuverschuldung einschränkt, entsteht ein 
+          Spannungsfeld zwischen notwendigen Investitionen und Haushaltsdisziplin.
+        </p>
+        <span style="font-size:0.9rem;font-style:italic;">
+          [Quelle: 
+            <a href="https://www.bfn.de/sozial-oekologische-transformation" target="_blank" style="color:#4c84ff;">bfn.de</a> 13.02.2025,
+            <a href="https://www.nordmetall.de/themen-news/digitaler-strukturwandel" target="_blank" style="color:#4c84ff;">nordmetall.de</a> 13.02.2025
+          ]
+        </span>
+      </section>
+
+      <!-- WAS SIND SCHULDEN -->
+      <section id="was-sind-schulden">
+        <h2>Was sind Schulden?</h2>
+        <p>
+          Schulden entstehen, wenn ein Staat mehr Geld ausgibt, als er über Steuern und Abgaben 
+          einnimmt. Man unterscheidet häufig:
+        </p>
+        <ul>
+          <li><strong>Gute Schulden:</strong> Schulden, die für langfristige Investitionen genutzt werden, z. B. in Infrastruktur, Bildung, Digitalisierung oder Klimaschutz. Diese tragen zum Wachstum der Wirtschaft bei und refinanzieren sich oft durch höhere Steuereinnahmen.</li>
+          <li><strong>Schlechte Schulden:</strong> Schulden, die zur Deckung von laufenden Ausgaben aufgenommen werden, z. B. zur Finanzierung von Sozialausgaben ohne langfristige Rendite.</li>
+        </ul>
+        <p>
+          Beispiel: Ein Kredit für eine neue Autobahn kann später durch höhere Steuereinnahmen aus Unternehmen und Benzinsteuern zurückgezahlt werden – eine sinnvolle Investition. Ein Kredit zur Finanzierung von kurzfristigen Rentensteigerungen refinanziert sich nicht direkt und belastet den Haushalt dauerhaft.
+        </p>
+        <span style="font-size:0.9rem;font-style:italic;">
+          [Quelle: 
+            <a href="https://www.bundesfinanzministerium.de/Content/DE/Standardartikel/Themen/Internationales_Finanzmarkt/Schuldenstrategie/deutsche-schuldenforderungen-und-schuldenerlasse.html" target="_blank" style="color:#4c84ff;">BMF</a> 25.02.2025
+          ]
+        </span>
+
+        <div class="image-container">
+          <img src="images/verschuldung gesamt.jpg" alt="Verschuldung des Öffentlichen Gesamthaushalts" />
+          <div class="image-caption">Abbildung: Verschuldung des Öffentlichen Gesamthaushalts (in Milliarden Euro)</div>
+          <span style="font-size:0.9rem;font-style:italic;">
+            [Quelle: 
+              <a href="https://www.destatis.de/DE/Themen/Staat/Oeffentliche-Finanzen/Schulden-Finanzvermoegen/_inhalt.html" target="_blank" style="color:#4c84ff;">
+                Verschuldung des Öffentlichen Gesamthaushalts
+              </a> 26.02.2025
+            ]
+          </span>
+        </div>
+      </section>
+
+      <!-- WAS IST DIE SCHULDENBREMSE -->
+      <section id="schuldenbremse">
+        <h2>Was ist die Schuldenbremse?</h2>
+        <p>
+          Die Schuldenbremse ist eine Regelung im deutschen Grundgesetz (Art. 109 GG), 
+          die seit 2009 die jährliche Neuverschuldung des Bundes auf 0,35 % des BIP begrenzt und 
+          die Bundesländer verpflichtet, keine neuen Schulden aufzunehmen (Ausnahmen gelten für Krisenzeiten).
+        </p>
+        <p>
+          Sie wurde nach der Finanzkrise 2008 eingeführt, um die Haushaltsdisziplin zu 
+          stärken und zukünftige Generationen vor übermäßiger Schuldenlast zu schützen.
+        </p>
+        <br/>
+        <h3 style="text-align:center; color:#4c84ff; margin-bottom:0.5rem;">Vor- und Nachteile</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Vorteile</th>
+              <th>Nachteile</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Fördert Haushaltsdisziplin</td>
+              <td>Erschwert notwendige Investitionen</td>
+            </tr>
+            <tr>
+              <td>Entlastet zukünftige Generationen</td>
+              <td>Weniger Flexibilität in Krisenzeiten</td>
+            </tr>
+            <tr>
+              <td>Signal an Finanzmärkte</td>
+              <td>Risiko für Infrastruktur und Bildung</td>
+            </tr>
+            <tr>
+              <td>Einhaltung der EU-Vorgaben</td>
+              <td>Potenzielle Wachstumsbremse</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          <strong>Die "Schwarze Null"</strong> ist ein damit verbundenes politisches Ziel, 
+          bei dem der Haushalt komplett ausgeglichen wird (keine Neuverschuldung). Kritiker 
+          bemängeln, dass dies notwendige Zukunftsinvestitionen hemmen kann.
+          <br/>
+          <span style="font-size:0.9rem;font-style:italic;">
+            [Quelle: 
+              <a href="https://www.studysmarter.de/studium/bwl/makrooekonomie-studium/schuldenbremse/" target="_blank" style="color:#4c84ff;">studysmarter</a> 21.02.2025, 
+              <a href="https://www.bpb.de/kurz-knapp/lexika/lexikon-der-wirtschaft/240511/schwarze-null/" target="_blank" style="color:#4c84ff;">bpd.de</a> 21.02.2025
+            ]
+          </span>
+        </p>
+      </section>
+
+      <!-- EINNAHMEN & AUSGABEN DES STAATES -->
+      <section>
+        <h2>Einnahmen und Ausgaben des Staates</h2>
+        <p>
+          Zur Veranschaulichung zeigen die folgenden Grafiken die Entwicklung der Staatseinnahmen 
+          und -ausgaben über einen längeren Zeitraum:
+        </p>
+
+        <div class="image-container">
+          <img src="images/einnahmen.jpg" alt="Einnahmen des Staates in Mrd. EUR" />
+          <div class="image-caption">Einnahmen des Staates (Steuern, Nettosozialbeiträge & Sonstige)</div>
+          <span style="font-size:0.9rem;font-style:italic;">
+            [Quelle: 
+              <a href="https://service.destatis.de/DE/vgr-monitor-deutschland/staat.html" target="_blank" style="color:#4c84ff;">Bild Einnahmen</a> 26.02.2025
+            ]
+          </span>
+        </div>
+
+        <div class="image-container">
+          <img src="images/ausgaben.jpg" alt="Ausgaben des Staates in Mrd. EUR" />
+          <div class="image-caption">Ausgaben des Staates (Sozialleistungen, Bruttoinvestitionen etc.)</div>
+          <span style="font-size:0.9rem;font-style:italic;">
+            [Quelle: 
+              <a href="https://service.destatis.de/DE/vgr-monitor-deutschland/staat.html" target="_blank" style="color:#4c84ff;">Bild Ausgaben</a> 26.02.2025
+            ]
+          </span>
+        </div>
+      </section>
+
+      <!-- GRÖSSTE AUSGABENPOSTEN -->
+      <section id="ausgabenposten">
+        <h2>Die größten Ausgabenposten des Bundeshaushalts</h2>
+        <div class="image-container">
+          <img src="images/piechart.jpg" alt="Pie Chart der größten Ausgabenposten des Bundes" />
+          <div class="image-caption">Verteilung der größten Ausgabenposten (in Prozent)</div>
+          <span style="font-size:0.9rem;font-style:italic;">
+            [Quelle: 
+              <a href="https://www.bundeshaushalt.de/DE/Bundeshaushalt-digital/bundeshaushalt-digital.html" target="_blank" style="color:#4c84ff;">Pie-Chart</a> 26.02.2025
+            ]
+          </span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Einzelplan</th>
+              <th>Betrag (in Tsd. Euro)</th>
+              <th>Anteil</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Bundesministerium für Arbeit und Soziales</td>
+              <td>175.675.498</td>
+              <td>36,84 %</td>
+            </tr>
+            <tr>
+              <td>Bundesministerium der Verteidigung</td>
+              <td>51.951.938</td>
+              <td>10,9 %</td>
+            </tr>
+            <tr>
+              <td>Bundesministerium für Digitales und Verkehr</td>
+              <td>44.145.217</td>
+              <td>9,26 %</td>
+            </tr>
+            <tr>
+              <td>Bundesschuld</td>
+              <td>39.571.791</td>
+              <td>8,3 %</td>
+            </tr>
+            <tr>
+              <td>Allgemeine Finanzverwaltung</td>
+              <td>38.645.278</td>
+              <td>8,11 %</td>
+            </tr>
+            <tr>
+              <td>Bundesministerium für Bildung und Forschung</td>
+              <td>21.486.334</td>
+              <td>4,51 %</td>
+            </tr>
+            <tr>
+              <td>Bundesministerium für Gesundheit</td>
+              <td>16.708.527</td>
+              <td>3,5 %</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- HERAUSFORDERUNGEN -->
+      <section id="herausforderungen">
+        <h2>Gesellschaftliche und wirtschaftliche Herausforderungen</h2>
+        <h3>Ökologische Transformation</h3>
+        <p>
+          Deutschland strebt Klimaneutralität bis 2045 an. Dafür sind hohe Investitionen in 
+          erneuerbare Energien, Infrastrukturprojekte (z. B. ÖPNV-Ausbau) und Förderprogramme 
+          notwendig. 
+          <span style="font-size:0.9rem;font-style:italic;">
+            [Quelle: <a href="https://www.bmwk.de" target="_blank" style="color:#4c84ff;">BMWK</a>]
+          </span>
+        </p>
+        <h3>Digitaler Strukturwandel</h3>
+        <p>
+          Die Digitalisierung erfordert Investitionen in digitale Bildung, Breitbandausbau 
+          und staatliche Verwaltungsprozesse. 
+          <span style="font-size:0.9rem;font-style:italic;">
+            [Quelle: <a href="https://www.bundesregierung.de" target="_blank" style="color:#4c84ff;">Digitalstrategie der Bundesregierung</a>]
+          </span>
+        </p>
+        <h3>Demografischer Wandel</h3>
+        <p>
+          Mit einer alternden Bevölkerung steigen die Kosten für Renten und Pflege. Gleichzeitig 
+          sinken die Einnahmen durch eine kleiner werdende Erwerbsbevölkerung. 
+          <span style="font-size:0.9rem;font-style:italic;">
+            [Quelle: <a href="https://www.destatis.de" target="_blank" style="color:#4c84ff;">Statistisches Bundesamt</a>]
+          </span>
+        </p>
+      </section>
+
+      <!-- PRO & CONTRA TABELLE -->
+      <section id="pro-contra">
+        <h2>Pro & Contra: Staatsverschuldung und Lockerung der Schuldenbremse</h2>
+        <p>
+          Diese Argumente werden in der politischen Debatte kontrovers diskutiert. Während einige
+          für eine Reform der Schuldenbremse plädieren, um Investitionen zu erleichtern, warnen
+          andere vor den langfristigen Risiken höherer Staatsverschuldung.
+        </p>
+        <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+          <thead>
+            <tr>
+              <th style="background-color: #dff0d8;">Pro-Argumente</th>
+              <th style="background-color: #f2dede;">Contra-Argumente</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>1. Notwendige Investitionen:</strong> Infrastruktur, Bildung und Klimaschutz erfordern erhebliche finanzielle Mittel, die durch eine gelockerte Schuldenbremse bereitgestellt werden könnten. 
+                <br><small>[Quelle: <a href="https://www.deutschlandfunk.de/schuldenbremse-kritik-debatte-abschaffung-100.html?utm_source=chatgpt.com" target="_blank" style="color:#4c84ff;">deutschlandfunk</a>]</small>
+              </td>
+              <td>
+                <strong>1. Belastung künftiger Generationen:</strong> Eine erhöhte Verschuldung heute kann zu höheren Zins- und Tilgungslasten für zukünftige Generationen führen.
+                <br><small>[Quelle: <a href="https://insm.de/aktuelles/publikationen/insm-position-schuldenbremse?utm_source=chatgpt.com" target="_blank" style="color:#4c84ff;">insm.de</a>]</small>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>2. Günstige Zinsen:</strong> Derzeit kann der Staat Kredite zu niedrigen Zinssätzen aufnehmen, was die Finanzierung von Investitionen erleichtert.
+                <br><small>[Quelle: <a href="https://www.ifo.de/fakten/2023-12-08/die-deutsche-schuldenbremse-stabilitaetsanker-oder-investitionsblocker?utm_source=chatgpt.com" target="_blank" style="color:#4c84ff;">ifo.de</a>]</small>
+              </td>
+              <td>
+                <strong>2. Haushaltsdisziplin:</strong> Eine Lockerung könnte den Anreiz zur effizienten Mittelverwendung mindern und zu unsolider Haushaltspolitik führen.
+                <br><small>[Quelle: <a href="https://www.ifo.de/fakten/2023-12-08/die-deutsche-schuldenbremse-stabilitaetsanker-oder-investitionsblocker?utm_source=chatgpt.com" target="_blank" style="color:#4c84ff;">ifo.de</a>]</small>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>3. Wirtschaftliche Impulse:</strong> Öffentliche Investitionen können das Wirtschaftswachstum ankurbeln und langfristig zu höheren Steuereinnahmen führen.
+                <br><small>[Quelle: <a href="https://www.tagesschau.de/wirtschaft/konjunktur/schuldenbremse-100.html?utm_source=chatgpt.com" target="_blank" style="color:#4c84ff;">tagesschau.de</a>]</small>
+              </td>
+              <td>
+                <strong>3. Abhängigkeit von Finanzmärkten:</strong> Eine hohe Verschuldung macht den Staat anfälliger für Zinsänderungen und kann die finanzielle Souveränität einschränken.
+                <br><small>[Quelle: <a href="https://www.ifo.de/fakten/2023-12-08/die-deutsche-schuldenbremse-stabilitaetsanker-oder-investitionsblocker?utm_source=chatgpt.com" target="_blank" style="color:#4c84ff;">ifo.de</a>]</small>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>4. Krisenbewältigung:</strong> In außergewöhnlichen Situationen, wie der COVID-19-Pandemie, sind staatliche Hilfsprogramme essenziell, um wirtschaftliche Stabilität zu gewährleisten.
+                <br><small>[Quelle: <a href="https://www.ifo.de/fakten/2023-12-08/die-deutsche-schuldenbremse-stabilitaetsanker-oder-investitionsblocker?utm_source=chatgpt.com" target="_blank" style="color:#4c84ff;">ifo.de</a>]</small>
+              </td>
+              <td>
+                <strong>4. Inflationsrisiken:</strong> Eine expansive Fiskalpolitik kann, insbesondere bei ausgelasteter Wirtschaft, zu steigenden Preisen führen.
+                <br><small>[Quelle: <a href="https://www.tagesschau.de/wirtschaft/konjunktur/schuldenbremse-100.html?utm_source=chatgpt.com" target="_blank" style="color:#4c84ff;">tagesschau.de</a>]</small>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          Diese Argumente werden in der aktuellen politischen Debatte intensiv diskutiert. Während einige Experten und Politiker für eine Reform der Schuldenbremse plädieren, um notwendige Investitionen zu ermöglichen, warnen andere vor den langfristigen Risiken einer erhöhten Staatsverschuldung.
+        </p>
+      </section>
+
+      <!-- INTERVIEWS -->
+      <section id="interviews">
+        <h2>Interviews mit Expert:innen</h2>
+        <p>Hier finden Sie spannende Einblicke aus Gesprächen mit vier verschiedenen Politikern zum Thema Schuldenbremse und Investitionen. 
+           <br><em>Klicken Sie auf den Titel, um den Inhalt aufzuklappen.</em>
+        </p>
+
+        <style>
+          details {
+            margin-bottom: 1.5rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 0.5rem;
+            background: #fafafa;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+          }
+          summary {
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            outline: none;
+            list-style: none;
+            color: #333;
+          }
+          summary::after {
+            content: " (klicken zum Aufklappen)";
+            font-weight: normal;
+            font-size: 0.9rem;
+            color: #666;
+          }
+          .interview-content {
+            margin-top: 1rem;
+            padding-left: 1rem;
+            line-height: 1.6;
+          }
+        </style>
+
+        <!-- Interview 1 -->
+        <details>
+          <summary>Interview mit CDU/Eberhard Kastens (Stellv. MIT-Vorsitzender im Stadtverband Burgdorf/Lehrte)</summary>
+          <div class="interview-content">
+            <p><strong>Frage: </strong>Wie wollen Sie sicherstellen, dass gleichzeitig genügend Investitionen in Bildung, Infrastruktur und Digitalisierung fließen?</p>
+            <ul>
+              <li>Die Schulden müssen von den Haushalten beglichen werden, doch das dauert etwas länger.</li>
+              <li>Zuerst sollen Investitionen in die Bildung getätigt werden.</li>
+              <li>Um Investitionen zu tätigen, muss Geld erwirtschaftet werden. Dies erfolgt durch das Reduzieren der Migration.</li>
+              <li>Der Haushalt kann um 25 Milliarden Euro erweitert werden.</li>
+              <li>Keine große Hoffnung für das erste Jahr. Im zweiten Jahr soll Konsolidierung erfolgen.</li>
+              <li>Die Ausgaben für Auszubildende und Bildung sollen erhöht werden, da die Wirtschaft Auszubildende und Fachkräfte benötigt.</li>
+            </ul>
+            <p><strong>Frage: </strong>Sollen Ihrer Meinung nach Schulden aufgenommen werden, um Investitionen zu tätigen?</p>
+            <ul>
+              <li>Investitionen tätigen (in Infrastruktur, Bildung, Militär usw.) durch Aufnahme von Schulden.</li>
+              <li>„Wir möchten Deutschland wieder anschaulich machen, um das Vertrauen der Unternehmen zu stärken."</li>
+            </ul>
+            <p><strong>Frage: </strong>Sehen Sie die Schuldenbremse in Deutschland als Bürde?</p>
+            <ul>
+              <li>Sie kommen momentan nicht an der Schuldenbremse vorbei.</li>
+              <li>„Je mehr wir zurückzahlen, desto mehr machen wir."</li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- Interview 2 -->
+        <details>
+          <summary>Interview mit FDP/Annika Lilienthal (Schatzmeisterin bei der FDP in Burgdorf/Uetze)</summary>
+          <div class="interview-content">
+            <p><strong>Frage: </strong>Wie stehen Sie zu der Schuldenbremse?</p>
+            <ul>
+              <li>Die FDP ist für die Schuldenbremse.</li>
+              <li>Die FDP will nicht, dass spätere Generationen (wir) die Schulden abbezahlen.</li>
+              <li>Die Schuldenbremse soll für die Infrastruktur gelockert werden, da ein Teil des Geldes zurückkommt.</li>
+            </ul>
+            <p><strong>Frage: </strong>Welche Kosten sollten Ihrer Meinung nach gestrichen werden?</p>
+            <ul>
+              <li>Schulden sollten für die Infrastruktur aufgenommen werden.</li>
+              <li>Schulden für Arbeitsplätze sorgen für Konsum (bringt einen Teil des Geldes wieder).</li>
+              <li>Schulden sollen NICHT für Konsum oder Bürgergeld gemacht werden.</li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- Interview 3 -->
+        <details>
+          <summary>Interview mit SPD/Rebecca Schamber (Abgeordnete der SPD im Bundestag)</summary>
+          <div class="interview-content">
+            <p><strong>Frage: </strong>Welche Änderung würden Sie an der Schuldenbremse vornehmen?</p>
+            <ul>
+              <li>Die SPD spricht für eine Reform: Die deutsche Schuldenbremse ist strenger als die EU-Regeln.</li>
+              <li>Mehr Flexibilität, um Schuldenaufnahme zu fördern.</li>
+              <li>Investitionen tätigen, um Bildung und Infrastruktur zu fördern. Wirtschaft ankurbeln für die Zukunft.</li>
+            </ul>
+            <p><strong>Frage: </strong>Sehen Sie die Schuldenbremse als Bürde?</p>
+            <ul>
+              <li>Wird als Bürde gesehen; Lindner verstehe dies nicht.</li>
+              <li>Das Geld wird jetzt benötigt, die Schuldenbremse hemmt Investitionen.</li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- Interview 4 -->
+        <details>
+          <summary>Interview mit Die Grünen/Jessica Peine (Direktkandidatin für Wahlkreis 43/Hannover)</summary>
+          <div class="interview-content">
+            <p><strong>Frage: </strong>Welche Maßnahmen würden Sie vorschlagen, um mehr Spielraum für wichtige Investitionen zu schaffen?</p>
+            <ul>
+              <li>Antizyklisches Investieren</li>
+              <li>Reformation</li>
+            </ul>
+            <p><strong>Frage: </strong>Wie kann der Zielkonflikt überwunden werden?</p>
+            <ul>
+              <li>Die Schuldenbremse soll verbessert werden.</li>
+              <li>Das kleinere Übel an Schulden soll gewählt werden.</li>
+            </ul>
+            <p><strong>Frage: </strong>Wie argumentieren Sie gegen Bedenken über Staatsverschuldung für zukünftige Generationen?</p>
+            <ul>
+              <li>Konjunkturpakete sollen Menschen zu Berufen führen.</li>
+              <li>Bund beschränkt sich auf Ausgaben, Stadt auf Abschreibungen.</li>
+              <li>Unsichtbare Schulden werden nicht beachtet (6.000€ pro Kopf in Burgdorf).</li>
+              <li>Das vollständige Verlassen auf die Schuldenbremse ist nicht optimal.</li>
+            </ul>
+            <p><strong>Frage: </strong>Wo sehen Sie die größte Investitionslücke in DE?</p>
+            <ul>
+              <li>Infrastruktur (Straßen, Schienen, Internet, Schulen)</li>
+              <li>Schulgebäude landen in der Kommune</li>
+              <li>Investitionen sind sehr wichtig</li>
+            </ul>
+            <p><strong>Frage: </strong>Was verstehen Sie unter „nachhaltiger Verschuldung"?</p>
+            <ul>
+              <li>Keine Schulden für Konsum, sondern für feste Dinge (Infrastruktur)</li>
+              <li>Investitionen sind wichtig für Bildung</li>
+            </ul>
+          </div>
+        </details>
+      </section>
+
+      <!-- STELLUNGNAHME -->
+      <section id="stellungnahme">
+        <h2>Stellungnahme</h2>
+        <p>
+          Die Schuldenbremse ist zweifellos ein Instrument zur Haushaltsdisziplin und zum Schutz vor exzessiver Verschuldung. Dennoch zeigt sich gerade in Zeiten von Krisen und bei wichtigen Zukunftsprojekten, dass diese finanzielle Bremse auch hinderlich sein kann. Es ist entscheidend, zwischen kurzfristiger Haushaltsdisziplin und langfristigen Investitionen zu unterscheiden.
+        </p>
+        <p>
+          Pro-Lockerung: Um Deutschlands Wettbewerbsfähigkeit zu erhalten und soziale Ungleichheiten zu verringern, sind Investitionen in Bildung, Infrastruktur und den Klimaschutz unerlässlich. Eine starre Schuldenbremse könnte diese Investitionen gefährden und langfristig mehr Schaden anrichten, als kurzfristig Schulden zu vermeiden. Der Wirtschaftsforscher Jens Südekum spricht sich daher für eine Reform der Schuldenbremse aus, um die notwendigen Investitionen bis 2030 zu ermöglichen.
+        </p>
+        <p>
+          Contra-Lockerung: Auf der anderen Seite ist es wichtig, nicht die Kontrolle über die Staatsfinanzen zu verlieren. Eine ausufernde Schuldenpolitik könnte Deutschland langfristig in eine finanzielle Abhängigkeit von den Kapitalmärkten bringen. Zudem könnten steigende Zinsen in der Zukunft die Haushalte belasten. Das ifo Institut betont, dass die Schuldenbremse als Stabilitätsanker dient und vor exzessiver Verschuldung schützt.
+        </p>
+      </section>
+
+      <!-- FAZIT -->
+      <section id="fazit">
+        <h2>Fazit</h2>
+        <p>
+          Die Frage nach der Lockerung der Schuldenbremse ist komplex und bedarf einer differenzierten Betrachtung. Einerseits sind Investitionen in essenzielle Zukunftsprojekte notwendig, um Deutschland nachhaltig zu stärken. Andererseits darf die langfristige finanzielle Stabilität nicht durch eine übermäßige Verschuldung gefährdet werden.
+        </p>
+        <p>
+          Ein sinnvoller Kompromiss könnte darin bestehen, die Schuldenbremse flexibler zu gestalten. Dies könnte bedeuten, in wirtschaftlich schwierigen Zeiten mehr Spielraum für notwendige Investitionen zu schaffen, gleichzeitig jedoch in Phasen wirtschaftlicher Stärke strikte Haushaltsdisziplin zu wahren und Rücklagen zu bilden.
+        </p>
+        <p>
+          Letztendlich geht es darum, sowohl kurzfristige wirtschaftliche Impulse zu ermöglichen als auch langfristig solide Staatsfinanzen zu gewährleisten. Nur so kann Deutschland den Spagat zwischen Wachstum, sozialer Gerechtigkeit und fiskalischer Verantwortung meistern und zukünftigen Generationen eine stabile Basis bieten.
+        </p>
+      </section>
+
+      <!-- KOMMENTARFUNKTION -->
+      <section id="comment-section">
+        <h2>Kommentare</h2>
+        <form id="comment-form">
+          <label for="username">Dein Name:</label>
+          <input type="text" id="username" placeholder="Name eingeben" required />
+
+          <label for="comment">Dein Kommentar:</label>
+          <textarea id="comment" rows="5" placeholder="Schreibe deinen Kommentar hier..." required></textarea>
+
+          <button type="submit">Kommentar absenden</button>
+        </form>
+
+        <div id="comments-container"></div>
+      </section>
+
+    </div> <!-- Ende main-content -->
+  </div> <!-- Ende page-container -->
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Helbin Hassan</p>
+    <p>helbin.hassan@mail-bbs.de</p>
+    <p>01625113273</p>
+  </footer>
+
+  <!-- JavaScript: Sidebar & Kommentare -->
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    function toggleSidebar() {
+      sidebar.classList.toggle('open');
+    }
+
+    // Kommentar-Funktion (localStorage)
+    const commentForm = document.getElementById("comment-form");
+    const commentsContainer = document.getElementById("comments-container");
+    let storedComments = JSON.parse(localStorage.getItem("comments")) || [];
+    renderComments(storedComments);
+
+    commentForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value.trim();
+      const commentText = document.getElementById("comment").value.trim();
+
+      if (username && commentText) {
+        const newComment = {
+          name: username,
+          text: commentText,
+          date: new Date().toLocaleString("de-DE")
+        };
+        storedComments.push(newComment);
+        localStorage.setItem("comments", JSON.stringify(storedComments));
+        renderComments(storedComments);
+        commentForm.reset();
+      }
+    });
+
+    function renderComments(commentsArray) {
+      commentsContainer.innerHTML = "";
+      commentsArray.forEach(comment => {
+        const commentDiv = document.createElement("div");
+        commentDiv.classList.add("single-comment");
+        commentDiv.innerHTML = `
+          <h4>${comment.name}</h4>
+          <p>${comment.text}</p>
+          <small>${comment.date}</small>
+        `;
+        commentsContainer.appendChild(commentDiv);
+      });
+    }
+  </script>
+
+</body>
+</html>
